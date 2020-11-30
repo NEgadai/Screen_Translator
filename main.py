@@ -19,7 +19,8 @@ from ctypes import *
 awareness = ctypes.c_int()
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
-pytesseract.pytesseract.tesseract_cmd = r'C:/Users/NEgadai/AppData/Local/Tesseract-OCR/tesseract.exe'
+# CHANGE 'tesseract.exe' PATH
+pytesseract.pytesseract.tesseract_cmd = r'C:/Users/USER/AppData/Local/Tesseract-OCR/tesseract.exe'
 
 
 def draw_rectangle(x: int, y: int):
