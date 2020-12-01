@@ -9,6 +9,7 @@ import keyboard
 import pytesseract
 import ctypes
 from googletrans import Translator
+from mtranslate import translate
 import tkinter
 import pyttsx3
 import win32con
@@ -27,7 +28,7 @@ def draw_rectangle(x: int, y: int):
     dc = win32gui.GetDC(0)
     dcObj = win32ui.CreateDCFromHandle(dc)
     red = win32api.RGB(255, 0, 0)  # Red
-    dcObj.SetBkColor(red)
+    # dcObj.SetBkColor(red)
     hwnd = win32gui.WindowFromPoint((0, 0))
     monitor = (0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1))
     while True:
@@ -42,7 +43,7 @@ def draw_text(original_text: str, translation_text: str, coor: list):
     dc = win32gui.GetDC(0)
     dcObj = win32ui.CreateDCFromHandle(dc)
     red = win32api.RGB(255, 0, 0)  # Red
-    dcObj.SetBkColor(red)
+    # dcObj.SetBkColor(red)
     dcObj.DrawFocusRect((coor[0], coor[1], coor[2], coor[3]))
 
     label = tkinter.Label(text=original_text + '\n' + translation_text, font=('Times', '12'), fg='red', bg='white')
@@ -115,12 +116,19 @@ if __name__ == '__main__':
             text = str.join(" ", text.splitlines())
             print(text)
             translator = Translator()
+            translate_counter = 0
             while True:
                 try:
+                    translate_counter += 1
                     translation = translator.translate(text=text, src='en', dest='iw').text
                     print(translation)
                     break
                 except Exception as e:
+                    # googletrans problem (sometimes)
+                    if translate_counter == 3:
+                        translation = translate(text, 'iw')
+                        print(translation)
+                        break
                     print(e)
                     translator = Translator()
 
